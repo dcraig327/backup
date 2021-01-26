@@ -48,12 +48,4 @@ function do_image() {
 	lvremove -y /dev/mapper/lv-$old_bak
 }
 
-function do_backup() {
-	# root_yyyymmdd_hhmm
-	new_bak=root_`date '+%Y%m%d_%H%M%S'`
-	lvcreate /dev/mapper/lv-root -L 50G -s -n $new_bak
-	#umount -q /mnt/images
-}
-
 do_image
-do_backup

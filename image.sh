@@ -1,20 +1,20 @@
 #!/bin/bash
 ###############################################################################
-# backup script for lvm
 # MUST be run as root/sudo
-###############################################################################
+# will create image of the first root snapshot found and then delete the ss
 # goal to use one function that will auto-backup
 # all lv's and then use rsync to offsite them
 ###############################################################################
 
 
-function do_image() {
+image() {
 	# mount /mnt/images
 	mount -a
 	umount -q /mnt/ss-root
 
 
-	# find the current lv-root backup name
+	# find the first lv-root backup name
+  #TODO: have this let the user choose which one if more than one
 	old_bak=`lvs | grep root_ | awk '{print $1;}'`
 
 	
@@ -46,6 +46,7 @@ function do_image() {
 	tar cf - -X /tmp/sockets-to-exclude /mnt/ss-root -P | pv -s $old_bak_size | gzip > /mnt/images/$old_bak.tar.gz
 	umount -q /mnt/ss-root
 	lvremove -y /dev/mapper/lv-$old_bak
+  umount /mnt/images
 }
 
-do_image
+image

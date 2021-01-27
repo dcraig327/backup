@@ -8,7 +8,9 @@
 ###############################################################################
 
 
-function do_backup() {
+snapshot() {
+	# mount /mnt/images
+  mount -a
 	# root_yyyymmdd_hhmm
 	new_bak=root_`date '+%Y%m%d_%H%M%S'`
 ##make -L size of root
@@ -16,4 +18,4 @@ function do_backup() {
 	umount -q /mnt/images
 }
 
-do_backup
+snapshot

@@ -1,0 +1,12 @@
+dev/*
+home/*
+media/*
+mnt/*
+pool/*
+proc/*
+run/*
+swapfile*
+sys/*
+tmp/*
+var/tmp/*
+var/cache/*

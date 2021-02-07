@@ -1,0 +1,13 @@
+sending incremental file list
+.local/share/sddm/xorg-session.log
+.mozilla/firefox/c4k1uvmr.default-release/
+file has vanished: "/pool/bak/latest/.mozilla/firefox/c4k1uvmr.default-release/.cookies.sqlite-wal.PST3Xg"
+.mozilla/firefox/c4k1uvmr.default-release/cookies.sqlite
+.mozilla/firefox/c4k1uvmr.default-release/storage/default/https+++www.dropbox.com/idb/
+.mozilla/firefox/c4k1uvmr.default-release/storage/default/https+++www.dropbox.com/idb/2146889975aspceixrMte.sqlite
+.mozilla/firefox/c4k1uvmr.default-release/storage/default/https+++www.dropbox.com/idb/2146889975aspceixrMte.sqlite-wal
+
+sent 2,813,926 bytes  received 7,742 bytes  1,881,112.00 bytes/sec
+total size is 21,437,664,068  speedup is 7,597.51
+rsync warning: some files vanished before they could be transferred (code 24) at main.c(1330) [sender=v3.2.3]
+Sun Feb 7 12:49:03 AM PST 2021

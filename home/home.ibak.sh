@@ -1,24 +1,22 @@
 #!/bin/bash
 
 # A script to perform incremental backups using rsync
-#echo "hello $USER. creating backup."
 
 set -o errexit
 set -o nounset
 set -o pipefail
 
+readonly BIN_DIR="${HOME}/bin/backup/home"
 readonly SOURCE_DIR="${HOME}"
 readonly BACKUP_DIR="/pool/backups/home"
-#readonly DATETIME="$(date '+%Y-%m-%d_%H:%M:%S')"
-#readonly BACKUP_PATH="${BACKUP_DIR}/${DATETIME}"
 readonly LATEST_LINK="${BACKUP_DIR}/latest"
-readonly EXCLUDE_LIST="${BACKUP_DIR}/exclude.list"
-#mkdir -p "${BACKUP_DIR}"
+readonly EXCLUDE_LIST="${BIN_DIR}/home.exclude.list"
+readonly LOG_FILE="${BIN_DIR}/home.ibak.log"
 
 while [ `pgrep -n rsync` ]
 do
 	sleep 1
 done
 
-rsync -aAXv --delete "${SOURCE_DIR}/" --exclude-from="${EXCLUDE_LIST}" "${LATEST_LINK}" > "${BACKUP_DIR}/log-ibak.log" 2>&1
-echo `date`>> "${BACKUP_DIR}/log-ibak.log"
+rsync -aAXv --delete "${SOURCE_DIR}/" --exclude-from="${EXCLUDE_LIST}" "${LATEST_LINK}" >> "${LOG_FILE}" 2>&1
+echo `date`>> "${LOG_FILE}"

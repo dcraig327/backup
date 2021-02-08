@@ -2,7 +2,7 @@
 
 # A script to perform incremental backups using rsync
 
-set -o errexit
+#set -o errexit
 set -o nounset
 set -o pipefail
 

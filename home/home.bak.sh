@@ -18,7 +18,7 @@ readonly LOG_FILE="${BIN_DIR}/home.bak.log"
 
 while [ `pgrep -n rsync` ]
 do
-	sleep 1
+  sleep 1
 done
 
 rsync -aAXv --delete "${SOURCE_DIR}/" --link-dest "${LATEST_LINK}" --exclude-from="${EXCLUDE_LIST}" "${BACKUP_PATH}" > "${LOG_FILE}" 2>&1

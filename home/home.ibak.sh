@@ -15,8 +15,8 @@ readonly LOG_FILE="${BIN_DIR}/home.ibak.log"
 
 while [ `pgrep -n rsync` ]
 do
-	sleep 1
+  sleep 1
 done
 
-rsync -aAXv --delete "${SOURCE_DIR}/" --exclude-from="${EXCLUDE_LIST}" "${LATEST_LINK}" >> "${LOG_FILE}" 2>&1
+rsync -aAXv --delete "${SOURCE_DIR}/" --exclude-from="${EXCLUDE_LIST}" "${LATEST_LINK}" > "${LOG_FILE}" 2>&1
 echo `date`>> "${LOG_FILE}"

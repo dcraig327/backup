@@ -1,4 +1,4 @@
 .cache
-.local/share/Steam
+.local
 .ssh
 tmp

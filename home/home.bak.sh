@@ -6,7 +6,6 @@
 set -o nounset
 set -o pipefail
 
-#there has to be a way to auto-set this BIN_DIR
 readonly BIN_DIR="${HOME}/bin/backup/home"
 readonly SOURCE_DIR="${HOME}"
 readonly BACKUP_DIR="/pool/backups/home"
@@ -21,7 +20,7 @@ do
   sleep 1
 done
 
-rsync -aAXv --delete "${SOURCE_DIR}/" --link-dest "${LATEST_LINK}" --exclude-from="${EXCLUDE_LIST}" "${BACKUP_PATH}" > "${LOG_FILE}" 2>&1
+rsync -aAXv --delete "${SOURCE_DIR}/" --link-dest "${LATEST_LINK}" --exclude-from="${EXCLUDE_LIST}" "${BACKUP_PATH}" > /dev/null 2>&1
 rm -rf "${LATEST_LINK}"
 ln -s "${BACKUP_PATH}" "${LATEST_LINK}"
-echo `date` >> "${LOG_FILE}"
+echo `date` > "${LOG_FILE}"

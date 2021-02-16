@@ -1,7 +1,7 @@
 # backup
 ## this app will backup & restore your data
 
-###project goals###
+### project goals ###
 * assists in creating, managing & maintaining a data backup system
   * **assists** meaning project is not required for the backup to function
 * informative to users
@@ -28,7 +28,7 @@
   * proper license to guarantee project remains open source
   * may later switch from GPLv3 to AGPLv3
 
-###project direction###
+### project direction ###
 * bash scripts to manage the backup
   * perform backup via rsync / syncoid
   * scheduled via cronjob

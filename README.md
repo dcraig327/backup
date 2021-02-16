@@ -36,7 +36,20 @@
 * bash scripts to manage the backup
   * perform backup via rsync / syncoid
   * scheduled via cronjob
-  * input/output data in files accessable by backup.sh  
+  * input/output data in files accessable by backup.sh 
+* to revert from a previous snapshot
+  * instructions on restoring from rescue mode or a live disc
+  * create a custom grub / boot entry
+  * revert one file
+  * revert a directory and all of it's dependent directories & files disabled in certain situations
+    * on certain directories
+    * if any of the destination files
+      * are in use
+      * have been used recently
+      * are executables
+      * are requirements for other files
+    * it maybe best to start with unlocked non-root or non-system directories as those likely don't depend on outside files
+    * however the .local and .config directories do store application version specific data
 * webapp for ui
   * backup.sh with a ui
 * deploy project onto another server/client

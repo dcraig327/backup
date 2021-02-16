@@ -8,6 +8,7 @@
 * informative to users
   * explains hard links and how they will result in incorrect directory sizes
   * explains the popular 3-2-1 backup strategy
+  * explains when a ups should be used
 * if unable to create a proper 3-2-1 backup, suggest inexpensive solutions based on community recommendations
   * physical hard drives for mirroring
   * remote hardware to rent for cloud storage
@@ -19,6 +20,7 @@
   * assists in choosing a backup strategy
   * change the backup strategy
   * reports of drive health & stats
+  * total cost of strategy from bandwidth to electricity & hardware
 * modular system allowing freedom to change
   * hard drives
   * data/ui servers

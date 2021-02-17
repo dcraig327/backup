@@ -33,10 +33,11 @@
 
 
 ### project direction ###
-* bash scripts to manage the backup
+* program to manage the backup
+  * port the shell scripts to js for cross-platform
   * perform backup via rsync / syncoid
   * scheduled via cronjob
-  * input/output data in files accessable by backup.sh 
+* input/output data via json files
 * to revert from a previous snapshot
   * instructions on restoring from rescue mode or a live disc
   * create a custom grub / boot entry
@@ -51,5 +52,6 @@
     * it maybe best to start with unlocked non-root or non-system directories as those likely don't depend on outside files
     * however the .local and .config directories do store application version specific data
 * webapp for ui
-  * backup.sh with a ui
+  * do what can be done on the command line
+  * display data so it's usable
 * deploy project onto another server/client

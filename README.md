@@ -1,8 +1,8 @@
 # backup
-## this app will backup & restore your data
+### this app will backup & restore your data
 
 
-### project goals ###
+## project goals
 * assists in creating, managing & maintaining a data backup system
   * **assists** meaning project is not required for the backup to function
 * informative to users
@@ -32,7 +32,7 @@
   * may later switch from GPLv3 to AGPLv3
 
 
-### project direction ###
+## project direction
 * program to manage the backup
   * port the shell scripts to js for cross-platform
   * perform backup via rsync / syncoid

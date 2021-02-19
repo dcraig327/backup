@@ -17,7 +17,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-//const fs = require("fs");
 const execSync = require("child_process").execSync;
 const env = require("process").env;
 
@@ -39,7 +38,6 @@ function sh(command) {
     console.log(outString);
   }
   return exitCode;
-  //return outString;
 }
 
 //returns 0 if process active
@@ -54,14 +52,10 @@ env.LATEST_LINK = "${BACKUP_DIR}/latest";
 env.EXCLUDE_LIST = "${BIN_DIR}/root.exclude.list";
 env.LOG_FILE = "${BIN_DIR}/root.ibak.log";
 
-// while (!pgrep("rsync")) {
-//   sh("sleep 1");
-// }
+while (!pgrep("rsync")) {
+  sh("sleep 1");
+}
 
-// let one =
-//   'rsync -aAXv --dry-run --delete "${SOURCE_DIR}/" --exclude-from="${EXCLUDE_LIST}" "${LATEST_LINK}" > /dev/null 2>&1';
-// let two = 'echo `date` > "${LOG_FILE}"';
-
-// // copy home vars and test that directory
-
-sh("echo 'hi\nby\n\n'");
+let one =
+  'rsync -aAXv --dry-run --delete "${SOURCE_DIR}/" --exclude-from="${EXCLUDE_LIST}" "${LATEST_LINK}" > /dev/null 2>&1';
+let two = 'echo `date` > "${LOG_FILE}"';

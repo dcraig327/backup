@@ -33,10 +33,9 @@ function sh(command) {
     outString = outString.toString();
   }
   if (outString) {
-    //BUG: only slice Buffers, string might not end 0A
-    //TODO: slice -2 for other platforms end 0D 0A
-    //might be a cross-platform function that handles it
-    outString = outString.slice(0, -1);
+    //this removes all line breaks at the end of string for linux,mac,windows
+    //need to only remove the very last linebreak
+    outString = outString.replace(/(\r\n|\n|\r)$/gm, "");
     console.log(outString);
   }
   return exitCode;
@@ -55,12 +54,14 @@ env.LATEST_LINK = "${BACKUP_DIR}/latest";
 env.EXCLUDE_LIST = "${BIN_DIR}/root.exclude.list";
 env.LOG_FILE = "${BIN_DIR}/root.ibak.log";
 
-while (!pgrep("rsync")) {
-  sh("sleep 1");
-}
+// while (!pgrep("rsync")) {
+//   sh("sleep 1");
+// }
 
-let one =
-  'rsync -aAXv --dry-run --delete "${SOURCE_DIR}/" --exclude-from="${EXCLUDE_LIST}" "${LATEST_LINK}" > /dev/null 2>&1';
-let two = 'echo `date` > "${LOG_FILE}"';
+// let one =
+//   'rsync -aAXv --dry-run --delete "${SOURCE_DIR}/" --exclude-from="${EXCLUDE_LIST}" "${LATEST_LINK}" > /dev/null 2>&1';
+// let two = 'echo `date` > "${LOG_FILE}"';
 
-// copy home vars and test that directory
+// // copy home vars and test that directory
+
+sh("echo 'hi\nby\n\n'");

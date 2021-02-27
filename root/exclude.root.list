@@ -8,3 +8,8 @@ swapfile
 sys/
 tmp/
 var/
+.var/
+.ssh/
+.cache/
+.gnupg/
+.pki/

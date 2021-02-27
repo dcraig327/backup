@@ -17,54 +17,61 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+
 const execSync = require("child_process").execSync;
 const env = require("process").env;
-require('dotenv').config();
+//require('dotenv').config();
+//let dotenv = require('dotenv');
+//dotenv-expand...
 
 //SOURCE_DIR        Directory of what to backup
 //BACKUP_DIR        Directory of Where to backup
+//BACKUP_SUFFIX     appended to backup_edir
 //LATEST_LINK       File that points to latest backup
 //EXCLUDE_LIST      File that contains exclude list
 //LOG_FILE          File for logs
 
-  // /%([^%]+)%/g, (_, n) => process.env[n])
 
-
-//this evaluates '~/downloads' and should check for ~
-//fooDir = fooDir.replace(/^~\//, process.env.HOME + '/');
-
-//This function doesn't handle the special variables: $0,$!,$$,$?,$-,$#,$@
-//No clue what's going on , heading to learn RegEx
 function evaluate(command) {
-  // const original = command;
-  // console.log(command);
-  // command = command.replace(/(${)([^{]+)}/g, (_,n) => { console.log(n); return process.env[n] || _; });
-  // console.log(command);
-  // command = command.replace(/([^$]+)/g, (_, n) => { console.log(n); return process.env[n] || _; });
-  // console.log(command);
-  // while (original !== command) {
-  //   command = evaluate(command);
-  // }
-  // console.log(command);
+  let original = command;
+  
+  console.log("start: " + command);
+
+  command = command.replace(/\${(.*)}/g, (_, n) => { return process.env[n] || _; });
+  
+  command = command.replace(/\$([_0-9a-zA-Z]*)/g, (_, n) => { return process.env[n] || _; });
+
+  command = command.replace(/(~)/g, (_, n) => { return process.env.HOME || _; });
+
+  while (original !== command) {
+    original = command;
+    command = evaluate(command);
+  }
+
+  console.log("end: " + command);
+
   return command;
 }
 
-function sh(command) {
+function sh(command,quiet=false) {
   let exitCode = 0;
   let outString;
-
-  command = evaluate(command);
 
   try {
     outString = execSync(command);
   } catch (err) {
     exitCode = err.status;
   }
+
   if (Buffer.isBuffer(outString)) {
     outString = outString.toString();
   }
   if (outString) {
     outString = outString.replace(/(\r\n|\n|\r).*$/, "");
+    
+    if (quiet)
+      return outString;
+    
     console.log(outString);
   }
   return exitCode;
@@ -75,57 +82,42 @@ function pgrep(process) {
   return sh(`pgrep -n ${process} > /dev/null`);
 }
 
-// while (!pgrep("rsync")) {
-//   sh("sleep 1");
-// }
+function setup_variables() {
+  env.BACKUP_PATH = env.BACKUP_DIR + '/';
+  if(env.BACKUP_SUFFIX)
+    env.BACKUP_PATH += sh(`${env.BACKUP_SUFFIX}`, true);
+}
 
-//sh("echo ~");
-//sh("echo $PATH");
-//sh("echo ${PATH}");
+function print_variables() {
+  sh("echo ${SOURCE_DIR}");
+  sh("echo ${BACKUP_DIR}");
+  sh("echo ${BACKUP_PATH}");
+  sh("echo ${BACKUP_SUFFIX}");
+  sh("echo ${LATEST_LINK}");
+  sh("echo ${EXCLUDE_LIST}");
+  sh(`echo ${env.LOG_FILE}`);
+  sh('echo ----');
+  console.log(env);
+}
 
-sh("echo ${LOG_DIR}");
+setup_variables();
 
-
-// sh("pwd");
-// sh("echo $HOME");
-
-// sh("echo $SOURCE_DIR");
-// sh("echo $BACKUP_DIR");
-// sh("echo $BIN_DIR");
-// sh("echo $DATETIME");
-
-// sh(`echo ${env.SOURCE_DIR}`);
-// sh(`echo ${env.DATETIME}`);
-// sh(`echo ${env.BIN_DIR}`);
-// sh(`echo ${env.LATEST_LINK}`);
-
-// //$(date '+%Y-%m-%d_%H:%M:%S')
-// sh("date '+%Y-%m-%d_%H:%M:%S'");
-
-// env.DT = "date '+%Y-%m-%d_%H:%M:%S'";
-// sh(`${env.DT}`);
-// //sh("echo $DT");
-// //sh("date '+%Y-%m-%d_%H:%M:%S'");
+while (!pgrep("rsync")) {
+  sh("sleep 1");
+}
 
 
-// sh(
-//   'echo rsync -aAXv --dry-run --delete "${SOURCE_DIR}/" --exclude-from="${EXCLUDE_LIST}" "${BACKUP_PATH}" > "${LOG_FILE}" 2>&1'
-// );
 
-//setup latest link
+//SET LATEST
+//what'll happen if no link dest?
+//sh("rsync -aAXv --delete ${SOURCE_DIR}/ --exclude-from=${EXCLUDE_LIST} ${BACKUP_PATH}");
 
-//here's the full backup
-//rsync -aAXv --delete "${SOURCE_DIR}/" --link-dest "${LATEST_LINK}" --exclude-from="${EXCLUDE_LIST}" "${BACKUP_PATH}" > "${LOG_FILE}" 2>&1
 
-// sh(
-//   `echo rsync -aAXv --dry-run --delete "${SOURCE_DIR}/" --exclude-from="${EXCLUDE_LIST}" "${BACKUP_PATH}" > "${LOG_FILE}" 2>&1`
-// );
-//sh("echo \`date\` >" + `${env.LOG_FILE}`);
-//sh(`echo ${env.LOG_FILE}`);
 
-//sh('rm -rf "${LATEST_LINK}"');
-//sh('ln -s "${BACKUP_PATH}" "${LATEST_LINK}"');
+//--progress -- --info=progress2
+sh("rsync -aAXv --delete ${SOURCE_DIR}/ --link-dest ${LATEST_LINK} --exclude-from=${EXCLUDE_LIST} ${BACKUP_PATH} > ${LOG_FILE} 2>&1");
 
-//kill env vars and instead do everything in js
+sh("echo `date` >> ${LOG_FILE}");
 
-// sh("echo `${TEST}`");
+sh("rm -rf ${LATEST_LINK}");
+sh("ln -s ${BACKUP_PATH} ${LATEST_LINK}");

@@ -45,17 +45,38 @@ function pgrep(process) {
   return sh(`pgrep -n ${process} > /dev/null`);
 }
 
-env.BIN_DIR = "${HOME}/bin/backup/root";
-env.SOURCE_DIR = "/";
-env.BACKUP_DIR = "/pool/backups/root";
-env.LATEST_LINK = "${BACKUP_DIR}/latest";
-env.EXCLUDE_LIST = "${BIN_DIR}/root.exclude.list";
-env.LOG_FILE = "${BIN_DIR}/root.ibak.log";
+//env.BIN_DIR="${HOME}/bin/backup/root";
+env.BIN_DIR="${HOME}/bin";
+env.SOURCE_DIR="/";
+env.BACKUP_DIR="/pool/backups/root";
+env.DATETIME="$(date '+%Y-%m-%d_%H:%M:%S')";
+env.BACKUP_PATH="${BACKUP_DIR}/${DATETIME}";
+env.LATEST_LINK="${BACKUP_DIR}/latest";
+env.EXCLUDE_LIST="${BIN_DIR}/exclude.root.list";
+env.LOG_FILE="${BIN_DIR}/backup.root.log";
 
 while (!pgrep("rsync")) {
   sh("sleep 1");
 }
 
-let one =
-  'rsync -aAXv --dry-run --delete "${SOURCE_DIR}/" --exclude-from="${EXCLUDE_LIST}" "${LATEST_LINK}" > /dev/null 2>&1';
-let two = 'echo `date` > "${LOG_FILE}"';
+sh("echo $HOME");
+sh("echo $BIN_DIR");
+
+// sh(
+//   'echo rsync -aAXv --dry-run --delete "${SOURCE_DIR}/" --exclude-from="${EXCLUDE_LIST}" "${BACKUP_PATH}" > "${LOG_FILE}" 2>&1'
+// );
+
+//setup latest link
+
+//here's the full backup
+//rsync -aAXv --delete "${SOURCE_DIR}/" --link-dest "${LATEST_LINK}" --exclude-from="${EXCLUDE_LIST}" "${BACKUP_PATH}" > "${LOG_FILE}" 2>&1
+
+// sh(
+//   'rsync -aAXv --dry-run --delete "${SOURCE_DIR}/" --exclude-from="${EXCLUDE_LIST}" "${BACKUP_PATH}" > "${LOG_FILE}" 2>&1'
+// );
+// sh('echo `date` > "${LOG_FILE}"');
+
+//sh('rm -rf "${LATEST_LINK}"');
+//sh('ln -s "${BACKUP_PATH}" "${LATEST_LINK}"');
+
+//kill env vars and instead do everything in js

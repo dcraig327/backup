@@ -115,6 +115,11 @@ while (!pgrep("rsync")) {
 
 
 //--progress -- --info=progress2
+
+/////////////
+//// SHOULD SAY IF NOT ROOT
+/////////////
+
 sh("rsync -aAXv --delete ${SOURCE_DIR}/ --link-dest ${LATEST_LINK} --exclude-from=${EXCLUDE_LIST} ${BACKUP_PATH} > ${LOG_FILE} 2>&1");
 
 sh("echo `date` >> ${LOG_FILE}");

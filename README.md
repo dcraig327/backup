@@ -55,3 +55,20 @@
   * do what can be done on the command line
   * display data so it's usable
 * deploy project onto another server/client
+
+## TODO
+* create help output for application usage
+* backup() should be smarter
+  * if no directories in BACKUP_DIR, run new backup
+  * else if no LATEST_LINK, create LATEST_LINK
+  * it's possible to create multiple sub-directories in the backup destination
+    ```
+    # To create to sub-directories using YYYY-MM-DD/HH:MM:SS format:
+    BACKUP_SUFFIX=echo $(date "+%Y-%m-%d")/$(date "+%H:%M:%S")
+    ```
+* prevent executing commands or expanding variables code from .env file. 
+  * add more code to do this within the program in a controlled manner
+
+* Stop executing shell commands which are going to be platform-dependent.
+* Look at other projects that do backup much better, syncoid
+* Create a UI

@@ -21,6 +21,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 const execSync = require("child_process").execSync;
 const env = require("process").env;
 
+function wipe_log_file() {
+  if (env.LOG_FILE) {
+    sh(`rm ${env.LOG_FILE}`);
+  } else {
+    console.log("Usage: specify a log file");
+  }
+}
+
 function print_variables() {
   output_message(`${env.BACKUP_TYPE}`);
   output_message(`${env.SOURCE_DIR}`);
@@ -104,6 +112,7 @@ function validate_variables() {
   }
 
   output_message(output_string);
+  return return_value;
 }
 
 function is_backup_type_valid() {
@@ -223,11 +232,11 @@ function sh(command, quiet = false) {
 function backup() {
   if (env.BACKUP_TYPE === "inc") {
     sh(
-      "rsync -aAXv --delete ${SOURCE_DIR}/ --exclude-from=${EXCLUDE_LIST} ${LATEST_LINK} > ${LOG_FILE} 2>&1"
+      "rsync -aAXv --delete ${SOURCE_DIR}/ --exclude-from=${EXCLUDE_LIST} ${LATEST_LINK} >> ${LOG_FILE} 2>&1"
     );
   } else if (env.BACKUP_TYPE === "full") {
     sh(
-      "rsync -aAXv --delete ${SOURCE_DIR}/ --link-dest ${LATEST_LINK} --exclude-from=${EXCLUDE_LIST} ${BACKUP_PATH} > ${LOG_FILE} 2>&1"
+      "rsync -aAXv --delete ${SOURCE_DIR}/ --link-dest ${LATEST_LINK} --exclude-from=${EXCLUDE_LIST} ${BACKUP_PATH} >> ${LOG_FILE} 2>&1"
     );
 
     sh("rm -rf ${LATEST_LINK}");
@@ -240,21 +249,18 @@ function backup() {
 }
 
 function main() {
+  wipe_log_file();
+
   if (!is_root()) {
-    const non_root_error = "Usage: backup.js must be run as root";
-    if (env.LOG_FILE) {
-      sh(`echo ${non_root_error} >> ${env.LOG_FILE}`);
-    } else {
-      console.log(non_root_error);
-    }
+    output_message("Usage: backup.js must be run as root");
     return 1;
   }
 
   //TODO: still debugging validate variables for other users
   //TODO: verify can write/edit all the files/folders pointed to
-  // if (!validate_variables()) {
-  //   return 2;
-  // }
+  if (!validate_variables()) {
+    return 2;
+  }
 
   setup_variables();
   create_backup_path();

@@ -74,3 +74,14 @@
   # To create to sub-directories using YYYY-MM-DD/HH:MM:SS format:
   BACKUP_SUFFIX=echo $(date "+%Y-%m-%d")/$(date "+%H:%M:%S")
   ```
+
+
+
+OLD-GOALS
+--------------------------------------------------------------------------------
+  # Use node.js & javascript to create the entire backend
+    * copy & sync backups from src to pool
+    * copy & sync backups from pool to cloud
+    * read the config file for how to do backups
+    * output metrics to a json file or database
+--------------------------------------------------------------------------------
